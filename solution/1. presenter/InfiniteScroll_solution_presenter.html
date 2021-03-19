@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case3 : Infinite Scroll - 출제자 해설</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css"
+    />
+    <style>
+      /*
+      ==================== html => MD 작업 시, 꼭! 확인해주세요. ====================
+      1. Markdown All in One : Print current document to HTML 실행. (VScode extension)
+      2. 생성된 README.html에서 body 태그 안에 있는것들을 복사
+      3. 루트 폴더에 README_OOO.md 생성 (OOO : Case 이름)
+      4. ! 자동완성을 통해 기본 html 폼을 만들고, body태그 안에 <2>의 내용 붙여넣기
+      5. font / code style에 관련된 <link>세줄과 <style> 태그 안에 있는 내용 붙여넣기
+      6. 상단 <title> 태그 안에 <h2> 텍스트 삽입
+      7. <img>태그 경로 변경해주기
+      [ EXAMPLE ]
+      [ 변경 전 ] : 절대경로로 되어있음
+      <img
+          width="600px"
+          src="file:////Users/ming/Desktop/ui-component/case3_InfiniteScroll/example_image.gif"
+        />
+      [ 변경 후 ] : 상대경로로 수정
+      <img
+          width="600px"
+          src="./example_image.gif"
+        />
+      8. html 내에 <h3>실행 방법 및 의존성 모듈 설치</h3> 하위 내용 아래와 같이 수정
+      [ EXAMPLE ]
+      [ 변경 전 ] : p에 className 없음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          index.html 열기
+        </p>
+      [ 변경 후 ] : p에 className 있음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          <p class="excute-text">index.html 열기</p>
+        </p>
+
+
+      [ 변경 전 ] : p태그와 pre태그가 div로 감싸져있지 않음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+
+        <p>터미널</p>
+        <pre><code class="language-bash"><div>  $ npm install
+        $ npm start
+      </div></code></pre>
+
+      [ 변경 후 ] : p태그와 pre태그가 div.code-wrap 으로 감싸져있음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+        
+        <div class="code-wrap">
+        <p>터미널</p>
+        <pre>
+          <code class="language-bash"><div>  $ npm install
+      $ npm start
+    </div></code></pre>
+    </div>
+    */
+      html {
+        overflow-x: hidden;
+      }
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      ul,
+      ol,
+      li,
+      dl,
+      dt,
+      dd,
+      p,
+      table {
+        margin: 0;
+        padding: 0;
+        color: #494949;
+        letter-spacing: -0.025rem;
+        box-sizing: border-box;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 600;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+
+      a img {
+        border: none;
+      }
+
+      img {
+        max-width: 100%;
+        vertical-align: middle;
+      }
+
+      ul li {
+        list-style: none;
+      }
+      p {
+        line-height: 1.8;
+      }
+
+      /* STYLE */
+      body {
+        padding: 0;
+        margin: 0;
+        line-height: 1.6;
+      }
+      h2 {
+        padding: 50px 0;
+        color: #ffffff;
+        font-size: 2rem;
+        text-align: center;
+        background: linear-gradient(45deg, #ed234b, #ff6c89, #ff6fb7);
+      }
+      h2::before {
+        content: "#";
+        display: inline-block;
+        margin-right: 5px;
+        color: #ff9db0;
+        font-weight: 300;
+        font-size: 2.2rem;
+      }
+      h3 {
+        position: relative;
+        margin: 30px 20px;
+        padding-bottom: 15px;
+        color: #303030;
+        font-size: 1.6rem;
+        border-bottom: 1px solid #ededed;
+      }
+
+      blockquote {
+        margin: 20px;
+        padding: 20px;
+        background: #f2f2f2;
+      }
+
+      strong {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .code-wrap {
+        position: relative;
+        background: #2f303b;
+        margin: 15px 0 0 0;
+      }
+      .code-wrap > p {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 2px 15px;
+        font-size: 0.7rem;
+        color: #ffffff;
+        text-align: center;
+        background: #61c8cc;
+      }
+      code {
+        background: #ededed;
+      }
+
+      .language-css > div,
+      .language-js > div {
+        color: #fff;
+        padding: 30px 20px;
+        background: #2f303b;
+      }
+      code.language-bash div {
+        margin-top: -20px;
+        padding: 30px 20px;
+        font-size: 1rem;
+        color: #ffffff;
+        background: #2f303b;
+        box-sizing: border-box;
+      }
+      code::after {
+        content: "";
+        display: block;
+      }
+
+      .excute-text {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #ed234b;
+      }
+      /* 좌, 우 여백 */
+      ol,
+      ul {
+        margin: 20px;
+        padding: 20px;
+        background: #f2f2f2;
+      }
+      ol li {
+        margin-left: 15px;
+      }
+      li {
+        font-size: 0.85rem;
+      }
+      h4,
+      h5,
+      h6,
+      p,
+      img,
+      pre {
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 id="case3--infinite-scroll---출제자-해설">
+      Case3 : Infinite Scroll - 출제자 해설
+    </h2>
+    <h3
+      id="q1-문제-상황에-대하여-java-script로-동작을-구현시킬-수-있는-코드를-작성해보세요"
+    >
+      q1. 문제 상황에 대하여 Java Script로 동작을 구현시킬 수 있는 코드를
+      작성해보세요
+    </h3>
+    <h4 id="a">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+<span class="hljs-keyword">import</span> renderList <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./listRenderer&quot;</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./style.css&quot;</span>;
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#app&quot;</span>);
+<span class="hljs-keyword">const</span> fetchMoreTrigger = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#fetchMore&quot;</span>);
+<span class="hljs-keyword">let</span> page = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">const</span> fetchMore = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> target = page ? fetchMoreTrigger : app;
+  target.classList.add(<span class="hljs-string">&quot;loading&quot;</span>);
+  <span class="hljs-keyword">await</span> renderList(page++);
+  target.classList.remove(<span class="hljs-string">&quot;loading&quot;</span>);
+};
+<span class="hljs-keyword">const</span> onScroll = <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> { clientHeight, scrollTop, scrollHeight } = e.target.scrollingElement;
+  <span class="hljs-keyword">if</span> (scrollTop &gt;= scrollHeight - clientHeight) {
+    fetchMore();
+  }
+};
+
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;scroll&quot;</span>, onScroll);
+fetchMore();
+
+
+</div></code></pre>
+    <h5 id="해설">해설</h5>
+    <ul>
+      <li>
+        scrollTop, clientHeight, scrollHeight 등의 값이 무엇을 의미하는지를
+        개발자도구의 element 탭을 통해 파악하자.
+      </li>
+    </ul>
+    <h3 id="q2-앞서-작성한-코드에-debounce를-적용해보자">
+      q2. 앞서 작성한 코드에 debounce를 적용해보자.
+    </h3>
+    <h4 id="a-1">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./style.css&quot;</span>;
+<span class="hljs-keyword">import</span> renderList <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./listRenderer&quot;</span>;
+<span class="hljs-keyword">import</span> { debounce } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./util&quot;</span>;
+
+<span class="hljs-comment">// Write Javascript code!</span>
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#app&quot;</span>);
+<span class="hljs-keyword">const</span> fetchMoreTrigger = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#fetchMore&quot;</span>);
+<span class="hljs-keyword">let</span> page = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">const</span> fetchMore = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> target = page ? fetchMoreTrigger : app;
+  target.classList.add(<span class="hljs-string">&quot;loading&quot;</span>);
+  <span class="hljs-keyword">await</span> renderList(page++);
+  target.classList.remove(<span class="hljs-string">&quot;loading&quot;</span>);
+};
+<span class="hljs-keyword">const</span> onScroll = <span class="hljs-function"><span class="hljs-params">e</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> { clientHeight, scrollTop, scrollHeight } = e.target.scrollingElement;
+  <span class="hljs-keyword">if</span> (scrollTop &gt;= scrollHeight - clientHeight) {
+    fetchMore();
+  }
+};
+
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;scroll&quot;</span>, debounce(onScroll, <span class="hljs-number">300</span>));
+fetchMore();
+</div></code></pre>
+    <pre><code class="language-js"><div><span class="hljs-comment">// util.js</span>
+<span class="hljs-keyword">const</span> getRandomSeconds = <span class="hljs-function">() =&gt;</span> (<span class="hljs-built_in">Math</span>.round(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">5</span>) + <span class="hljs-number">1</span>) * <span class="hljs-number">250</span>;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> randomTimer = <span class="hljs-function">(<span class="hljs-params">func, ...args</span>) =&gt;</span> <span class="hljs-function"><span class="hljs-params">resolve</span> =&gt;</span> {
+  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> resolve(func(...args)), getRandomSeconds());
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> debounce = <span class="hljs-function">(<span class="hljs-params">func, delay</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> timeoutId = <span class="hljs-literal">null</span>;
+  <span class="hljs-comment">// do something</span>
+  <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">...arg</span>) =&gt;</span> {
+    <span class="hljs-built_in">clearTimeout</span>(timeoutId);
+    timeoutId = <span class="hljs-built_in">setTimeout</span>(func.bind(<span class="hljs-literal">null</span>, ...arg), delay);
+  };
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dummyFetcher = <span class="hljs-function">(<span class="hljs-params">method, args</span>) =&gt;</span>
+  <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(randomTimer(method, args));
+
+</div></code></pre>
+    <h5 id="해설-1">해설</h5>
+    <ul>
+      <li>
+        scroll 이벤트는 매우 많이 발생하므로 성능 저하가 우려된다. ‘fetchMore’
+        동작은 스크롤의 최하단에서만 발생하므로 스크롤 이벤트 중 마지막 값에
+        대해서만 반응하는 것으로 충분하다. 이를 위한 기법인 throttle / debounce
+        소개.
+      </li>
+    </ul>
+    <h3 id="q3-이번에는-intersection-observer를-활용해보자">
+      q3. 이번에는 Intersection Observer를 활용해보자
+    </h3>
+    <h4 id="a-2">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">&quot;./style.css&quot;</span>;
+<span class="hljs-keyword">import</span> renderList <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;./listRenderer&quot;</span>;
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#app&quot;</span>);
+<span class="hljs-keyword">const</span> fetchMoreTrigger = <span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">&quot;#fetchMore&quot;</span>);
+<span class="hljs-keyword">let</span> page = <span class="hljs-number">0</span>;
+
+<span class="hljs-keyword">const</span> fetchMore = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> target = page ? fetchMoreTrigger : app;
+  target.classList.add(<span class="hljs-string">&quot;loading&quot;</span>);
+  <span class="hljs-keyword">await</span> renderList(page++);
+  target.classList.remove(<span class="hljs-string">&quot;loading&quot;</span>);
+};
+
+<span class="hljs-keyword">const</span> fetchMoreObserver = <span class="hljs-keyword">new</span> IntersectionObserver(<span class="hljs-function">(<span class="hljs-params">[{ isIntersecting }]</span>) =&gt;</span> {
+    <span class="hljs-comment">// do something</span>
+  <span class="hljs-keyword">if</span> (isIntersecting) fetchMore();
+});
+fetchMoreObserver.observe(fetchMoreTrigger);
+
+fetchMore();
+
+</div></code></pre>
+    <h5 id="해설-2">해설</h5>
+    <ul>
+      <li>
+        IntersectionObserver는 자바스크립트 메인 쓰레드에서 실행되는 Event
+        Listener가 아닌 브라우저에서 별도로 마련한 API이므로 성능 저하의 우려가
+        적다.
+      </li>
+    </ul>
+    <h3 id="q4-react--intersection-observer를-활용하여-구현해보세요">
+      q4. React + Intersection Observer를 활용하여 구현해보세요.
+    </h3>
+    <h4 id="a-3">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-keyword">import</span> React, { useRef, useEffect } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;react&quot;</span>;
+
+<span class="hljs-keyword">const</span> FetchMore = <span class="hljs-function">(<span class="hljs-params">{ loading, setPage }</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> fetchMoreTrigger = useRef(<span class="hljs-literal">null</span>);
+  <span class="hljs-keyword">const</span> fetchMoreObserver = <span class="hljs-keyword">new</span> IntersectionObserver(<span class="hljs-function">(<span class="hljs-params">[{ isIntersecting }]</span>) =&gt;</span> {
+      <span class="hljs-comment">// do something</span>
+    <span class="hljs-keyword">if</span> (isIntersecting) setPage(<span class="hljs-function"><span class="hljs-params">prev</span> =&gt;</span> prev + <span class="hljs-number">1</span>);
+  });
+
+  useEffect(<span class="hljs-function">() =&gt;</span> {
+    fetchMoreObserver.observe(fetchMoreTrigger.current);
+    <span class="hljs-keyword">return</span> <span class="hljs-function">() =&gt;</span> {
+      fetchMoreObserver.unobserve(fetchMoreTrigger.current);
+    };
+  }, []);
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>
+      <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;fetchMore&quot;</span>
+      <span class="hljs-attr">className</span>=<span class="hljs-string">{loading</span> ? &quot;<span class="hljs-attr">loading</span>&quot; <span class="hljs-attr">:</span> &quot;&quot;}
+      <span class="hljs-attr">ref</span>=<span class="hljs-string">{fetchMoreTrigger}</span>
+    /&gt;</span></span>
+  );
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> FetchMore;
+
+</div></code></pre>
+    <h5 id="해설-3">해설</h5>
+    <ul>
+      <li>
+        일반적으로 쓰지 않게 되는 시점에 unobserve / removeEventListener 등을
+        해줘야한다는 것을 잊어버리거나, 혹은 생각해냈더라도 코드 구현이 애매한
+        경우가 종종 있는데, React에서는 useEffect 내에서 observe - unobserve /
+        addEventListener - removeEvenntListener를 쌍으로 매칭하여 구현하는 것이
+        자연스럽기 때문에 익숙해지면 잊어버릴 일이 없게 된다.
+      </li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+body {
+  margin: 0;
+}
+#app {
+  position: relative;
+  padding: 10px 10px 0;
+}
+#app.loading {
+  height: 100vh;
+}
+#app.loading:after {
+  content: "... 로딩중 ...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: solid 1px #ccc;
+}
+
+#fetchMore {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+#fetchMore.loading:after {
+  content: "더보기";
+}
+#fetchMore.loading {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  line-height: 28px;
+  border-top: solid 1px #000;
+  border-bottom: solid 1px #000;
+  background-color: #ff9;
+}
+#fetchMore.loading:after {
+  content: "... 로딩중 ...";
+}
+li {
+  display: flex;
+  flex-direction: row;
+  border-bottom: solid 1px #ccc;
+  font-size: 0.8em;
+  color: #999;
+}
+.no {
+  flex: 0 0 30px;
+  padding: 10px 5px;
+  text-align: center;
+  place-self: center;
+}
+.content {
+  padding: 10px 5px;
+  border-left: 1px solid #ccc;
+}
+.text {
+  font-size: 1em;
+  color: #000;
+  margin-top: 5px;
+  line-height: 1.5em;
+}

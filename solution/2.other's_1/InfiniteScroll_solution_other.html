@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Case3 : Infinite Scroll - 대기업 S사 프론트엔드 개발자님의 답안
+    </title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css"
+    />
+    <style>
+      /*
+      ==================== html => MD 작업 시, 꼭! 확인해주세요. ====================
+      1. Markdown All in One : Print current document to HTML 실행. (VScode extension)
+      2. 생성된 README.html에서 body 태그 안에 있는것들을 복사
+      3. 루트 폴더에 README_OOO.md 생성 (OOO : Case 이름)
+      4. ! 자동완성을 통해 기본 html 폼을 만들고, body태그 안에 <2>의 내용 붙여넣기
+      5. font / code style에 관련된 <link>세줄과 <style> 태그 안에 있는 내용 붙여넣기
+      6. 상단 <title> 태그 안에 <h2> 텍스트 삽입
+      7. <img>태그 경로 변경해주기
+      [ EXAMPLE ]
+      [ 변경 전 ] : 절대경로로 되어있음
+      <img
+          width="600px"
+          src="file:////Users/ming/Desktop/ui-component/case3_InfiniteScroll/example_image.gif"
+        />
+      [ 변경 후 ] : 상대경로로 수정
+      <img
+          width="600px"
+          src="./example_image.gif"
+        />
+      8. html 내에 <h3>실행 방법 및 의존성 모듈 설치</h3> 하위 내용 아래와 같이 수정
+      [ EXAMPLE ]
+      [ 변경 전 ] : p에 className 없음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          index.html 열기
+        </p>
+      [ 변경 후 ] : p에 className 있음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          <p class="excute-text">index.html 열기</p>
+        </p>
+
+
+      [ 변경 전 ] : p태그와 pre태그가 div로 감싸져있지 않음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+
+        <p>터미널</p>
+        <pre><code class="language-bash"><div>  $ npm install
+        $ npm start
+      </div></code></pre>
+
+      [ 변경 후 ] : p태그와 pre태그가 div.code-wrap 으로 감싸져있음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+        
+        <div class="code-wrap">
+        <p>터미널</p>
+        <pre>
+          <code class="language-bash"><div>  $ npm install
+      $ npm start
+    </div></code></pre>
+    </div>
+    */
+      html {
+        overflow-x: hidden;
+      }
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      ul,
+      ol,
+      li,
+      dl,
+      dt,
+      dd,
+      p,
+      table {
+        margin: 0;
+        padding: 0;
+        color: #494949;
+        letter-spacing: -0.025rem;
+        box-sizing: border-box;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-weight: 600;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+
+      a img {
+        border: none;
+      }
+
+      img {
+        max-width: 100%;
+        vertical-align: middle;
+      }
+
+      ul li {
+        list-style: none;
+      }
+      p {
+        line-height: 1.8;
+      }
+
+      /* STYLE */
+      body {
+        padding: 0;
+        margin: 0;
+        line-height: 1.6;
+      }
+      h2 {
+        padding: 50px 0;
+        color: #ffffff;
+        font-size: 2rem;
+        text-align: center;
+        background: linear-gradient(45deg, #ed234b, #ff6c89, #ff6fb7);
+      }
+      h2::before {
+        content: "#";
+        display: inline-block;
+        margin-right: 5px;
+        color: #ff9db0;
+        font-weight: 300;
+        font-size: 2.2rem;
+      }
+      h3 {
+        position: relative;
+        margin: 30px 20px;
+        padding-bottom: 15px;
+        color: #303030;
+        font-size: 1.6rem;
+        border-bottom: 1px solid #ededed;
+      }
+
+      blockquote {
+        margin: 20px;
+        padding: 20px;
+        background: #f2f2f2;
+      }
+
+      strong {
+        display: block;
+        margin-top: 10px;
+      }
+
+      .code-wrap {
+        position: relative;
+        background: #2f303b;
+        margin: 15px 0 0 0;
+      }
+      .code-wrap > p {
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 2px 15px;
+        font-size: 0.7rem;
+        color: #ffffff;
+        text-align: center;
+        background: #61c8cc;
+      }
+      code {
+        background: #ededed;
+      }
+
+      .language-css > div,
+      .language-js > div {
+        color: #fff;
+        padding: 30px 20px;
+        background: #2f303b;
+      }
+      code.language-bash div {
+        margin-top: -20px;
+        padding: 30px 20px;
+        font-size: 1rem;
+        color: #ffffff;
+        background: #2f303b;
+        box-sizing: border-box;
+      }
+      code::after {
+        content: "";
+        display: block;
+      }
+
+      .excute-text {
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: #ed234b;
+      }
+      /* 좌, 우 여백 */
+      ol,
+      ul {
+        margin: 20px;
+        padding: 20px;
+        background: #f2f2f2;
+      }
+      ol li {
+        margin-left: 15px;
+      }
+      li {
+        font-size: 0.85rem;
+      }
+      h4,
+      h5,
+      h6,
+      p,
+      img,
+      pre {
+        padding: 0 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2 id="case3--infinite-scroll---대기업-s사-프론트엔드-개발자님의-답안">
+      Case3 : Infinite Scroll - 대기업 S사 프론트엔드 개발자님의 답안
+    </h2>
+    <h3
+      id="q1-문제-상황에-대하여-java-script로-동작을-구현시킬-수-있는-코드를-작성해보세요"
+    >
+      q1. 문제 상황에 대하여 Java Script로 동작을 구현시킬 수 있는 코드를
+      작성해보세요
+    </h3>
+    <h4 id="a">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+...
+
+<span class="hljs-comment">/**
+ * 스크롤 임계치
+ */</span>
+<span class="hljs-keyword">const</span> scrollThreshold = <span class="hljs-number">.95</span>;
+
+<span class="hljs-keyword">const</span> onScroll = <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+  <span class="hljs-comment">// do something (hint: e.target.scrollingElement)</span>
+  <span class="hljs-keyword">const</span> {
+    scrollTop,
+    clientHeight,
+    scrollHeight,
+  } = e.currentTarget.scrollingElement
+
+  <span class="hljs-comment">/**
+   * 현재 스크롤된 위치를 0-1 값으로 구함
+   * `scrollTop` ⇒ 현재 스크롤된 위치, `clientHeight` ⇒ 현재 뷰포트의 높이, `scrollHeight` ⇒ 스크롤 영역 높이
+   */</span>
+  <span class="hljs-keyword">const</span> scrollRatio = (scrollTop + clientHeight) / scrollHeight;
+
+  <span class="hljs-comment">/**
+   * [!] 브라우저 또는 단말마다 편차가 있을수 있어 1(100%) 값 보다는 `0.95 ~ 0.99` 값을 적용하는게 더 자연스러움
+   */</span>
+  <span class="hljs-keyword">if</span> (scrollRatio &gt; scrollThreshold) {
+    loadMore();
+  }
+};
+
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;scroll&quot;</span>, onScroll);
+loadMore();
+</div></code></pre>
+    <h5 id="해설">해설</h5>
+    <ul>
+      <li>
+        문제 힌트로 주어진 <code>scrollTop</code>, <code>clientHeight</code>,
+        <code>scrollHeight</code> 속성 값들을 이용하여 스크롤된 퍼센테이지 값을
+        구하고, 임계 값(95% 이상)에 초과하는 경우 추가적으로 데이터를 불러오도록
+        구현.
+      </li>
+    </ul>
+    <h3 id="q2-앞서-작성한-코드에-debounce를-적용해보자">
+      q2. 앞서 작성한 코드에 debounce를 적용해보자.
+    </h3>
+    <h4 id="a-1">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+...
+
+<span class="hljs-comment">/**
+ * 스크롤 임계치
+ */</span>
+<span class="hljs-keyword">const</span> scrollThreshold = <span class="hljs-number">.95</span>;
+
+<span class="hljs-keyword">const</span> onScroll = <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> {
+  <span class="hljs-keyword">const</span> {
+    scrollTop,
+    clientHeight,
+    scrollHeight,
+  } = e.target.scrollingElement
+
+  <span class="hljs-comment">/**
+   * 현재 스크롤된 위치를 0-1 값으로 구함
+   * `scrollTop` ⇒ 현재 스크롤된 위치, `clientHeight` ⇒ 현재 뷰포트의 높이, `scrollHeight` ⇒ 스크롤 영역 높이
+   */</span>
+  <span class="hljs-keyword">const</span> scrollRatio = (scrollTop + clientHeight) / scrollHeight;
+
+  <span class="hljs-comment">/**
+   * [!] 브라우저 또는 단말마다 편차가 있을수 있어 1(100%) 값 보다는 `0.95 ~ 0.99` 값을 적용하는게 더 자연스러움
+   */</span>
+  <span class="hljs-keyword">if</span> (scrollRatio &gt; scrollThreshold) {
+    fetchMore();
+  }
+};
+
+<span class="hljs-keyword">const</span> debounceDelay = <span class="hljs-number">100</span>;
+<span class="hljs-keyword">const</span> onDebounceScroll = debounce(onScroll, debounceDelay);
+
+<span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">&quot;scroll&quot;</span>, onDebounceScroll);
+fetchMore();
+</div></code></pre>
+    <pre><code class="language-js"><div><span class="hljs-comment">// debounce.js</span>
+<span class="hljs-comment">/**
+ * 입력된 `func` 함수가 연속하여 호출되도 마지막으로 &quot;함수가 호출된 시간 + `delay`&quot; 시간이후에 1회만 실행
+ * 
+ * <span class="hljs-doctag">@param <span class="hljs-type">{function}</span> </span>func 
+ * <span class="hljs-doctag">@param <span class="hljs-type">{number}</span> </span>delay 단위는 milliseconds 입니다.
+ */</span>
+<span class="hljs-keyword">const</span> debounce = <span class="hljs-function">(<span class="hljs-params">func, delay</span>) =&gt;</span> {
+    <span class="hljs-comment">/**
+     * `setTimeout` 아이디를 저장
+     */</span>
+    <span class="hljs-keyword">let</span> procId = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
+        <span class="hljs-keyword">if</span> (procId) {
+            <span class="hljs-comment">/**
+             * `procId`가 존재하면 실행되지 않도록 제거
+             */</span>
+            <span class="hljs-built_in">window</span>.clearTimeout(procId);
+        }
+        <span class="hljs-comment">/**
+         * `delay` 이후 해당 함수가 실행되도록 `setTimeout`에 태스크를 등록
+         */</span>
+        procId = <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> func(...args), delay);
+    }
+};
+</div></code></pre>
+    <pre><code class="language-js"><div><span class="hljs-comment">// util.js</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> debounce = <span class="hljs-function">(<span class="hljs-params">func, delay</span>) =&gt;</span> {
+  <span class="hljs-comment">/**
+   * setTimeout 실행시 태스크 아이디를 저장
+   */</span>
+  <span class="hljs-keyword">let</span> timeoutId = <span class="hljs-literal">null</span>;
+  <span class="hljs-keyword">return</span> <span class="hljs-function">(<span class="hljs-params">...args</span>) =&gt;</span> {
+    <span class="hljs-comment">/**
+     * 이미 실행 대기중인 태스크가 존재하는 경우 해당 태스크를 제거
+     */</span>
+    <span class="hljs-keyword">if</span> (timeoutId) {
+      <span class="hljs-built_in">clearTimeout</span>(timeoutId);
+    }
+    <span class="hljs-comment">/**
+     * 입력받은 `delay 후에 해당 함수가 실행되도록 `setTimeout` 실행
+     */</span>
+    timeoutId = <span class="hljs-built_in">setTimeout</span>(func, delay, ...args);
+  }
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> dummyFetcher = <span class="hljs-function">(<span class="hljs-params">method, args</span>) =&gt;</span>
+  <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(randomTimer(method, args));
+</div></code></pre>
+    <h5 id="해설-1">해설</h5>
+    <ul>
+      <li>
+        <code>q1</code>에서 구현한 <code>onSCroll</code> 함수를
+        <code>debounce</code> 유틸을 적용하여 스크롤이 연속적으로 동작하더라도
+        이벤트가 매번 실행되지 않고 가장 마지막 동작후 <code>delay</code>가
+        초과된 시점에 한번만 실행되도록 하여 성능을 개선하였습니다.
+      </li>
+    </ul>
+    <h5 id="팁">팁</h5>
+    <ul>
+      <li>
+        <code>debounce</code>, <code>throttle</code> 유틸함수는 자주 사용되기
+        때문에 사용방법과 원리를 이해하고 계시는게 좋습니다.
+        <ul>
+          <li>
+            <a href="https://www.npmjs.com/package/lodash.debounce"
+              >https://www.npmjs.com/package/lodash.debounce</a
+            >
+          </li>
+          <li>
+            <a href="https://www.npmjs.com/package/lodash.throttle"
+              >https://www.npmjs.com/package/lodash.throttle</a
+            >
+          </li>
+        </ul>
+      </li>
+      <li>
+        <code>debounce</code>는 클로저(closure)의 원리를 이해하고,
+        <code>setTimeout</code>를 알고 있으면 간단히 구현할 수 있습니다.
+        <ul>
+          <li>
+            <a
+              href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Closures"
+              >https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Closures</a
+            >
+          </li>
+          <li>
+            <a
+              href="https://developer.mozilla.org/ko/docs/Web/API/WindowTimers/setTimeout"
+              >https://developer.mozilla.org/ko/docs/Web/API/WindowTimers/setTimeout</a
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h3 id="q3-이번에는-intersection-observer를-활용해보자">
+      q3. 이번에는 Intersection Observer를 활용해보자
+    </h3>
+    <h4 id="a-2">A)</h4>
+    <pre><code class="language-js"><div><span class="hljs-comment">// index.js</span>
+
+...
+
+const fetchMoreObserver = <span class="hljs-keyword">new</span> IntersectionObserver(<span class="hljs-function">(<span class="hljs-params">[{ isIntersecting }]</span>) =&gt;</span> {
+  <span class="hljs-comment">// do something</span>
+  <span class="hljs-keyword">if</span>(isIntersecting){
+    fetchMore();
+  }
+});
+
+fetchMoreObserver.observe(fetchMoreTrigger);
+
+fetchMore();
+</div></code></pre>
+    <h5 id="해설-2">해설</h5>
+    <ul>
+      <li>
+        IntersectionObserver 사용시 위와같은 케이스에서 성능 부하를 크게 줄일수
+        있습니다.
+      </li>
+      <li>
+        실제로 IntersectionObserver가 하는 역할을 유사하게 구현하기 위해서는,
+        스크롤 이벤트가 동작할때 마다 각 객체의 offset(위치) 정보를 확인하고
+        계산하여야 하는데, 반복되는 스크롤 이벤트에 따른 부하 + 객체의 offset를
+        알아내기 위한 속성값을 호출할때 발생하는 reflow 비용이 발생합니다.
+      </li>
+    </ul>
+    <h5 id="관련자료">관련자료</h5>
+    <ul>
+      <li>
+        <a
+          href="https://developer.mozilla.org/ko/docs/Web/API/IntersectionObserver"
+          >https://developer.mozilla.org/ko/docs/Web/API/IntersectionObserver</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect"
+          >https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect</a
+        >
+      </li>
+      <li>
+        <a href="https://gist.github.com/paulirish/5d52fb081b3570c81e3a"
+          >https://gist.github.com/paulirish/5d52fb081b3570c81e3a</a
+        >
+      </li>
+    </ul>
+    <h3 id="q4-react--intersection-observer를-활용하여-구현해보세요">
+      q4. React + Intersection Observer를 활용하여 구현해보세요.
+    </h3>
+    <blockquote>
+      <p>[문제 3] 내용을 참고해 주세요!</p>
+    </blockquote>
+    <h3 id="결론">결론</h3>
+    <ul>
+      <li>
+        Intersection Observer를 이용하면 스크롤 이벤트를 이용하지 않고 간단히
+        해결이 가능하고, 스크롤 이벤트를 이용하는것 보다 좋은 성능을 낼 수
+        있습니다.
+      </li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Case3 : Infinite scroll</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css"
+  />
+  <style>
+    /*
+      ==================== html => MD 작업 시, 꼭! 확인해주세요. ====================
+      1. Markdown All in One : Print current document to HTML 실행. (VScode extension)
+      2. 생성된 README.html에서 body 태그 안에 있는것들을 복사
+      3. 루트 폴더에 README_OOO.md 생성 (OOO : Case 이름)
+      4. ! 자동완성을 통해 기본 html 폼을 만들고, body태그 안에 <2>의 내용 붙여넣기
+      5. font / code style에 관련된 <link>세줄과 <style> 태그 안에 있는 내용 붙여넣기
+      6. 상단 <title> 태그 안에 <h2> 텍스트 삽입
+      7. <img>태그 경로 변경해주기
+      [ EXAMPLE ]
+      [ 변경 전 ] : 절대경로로 되어있음
+      <img
+          width="600px"
+          src="file:////Users/ming/Desktop/ui-component/case3_InfiniteScroll/example_image.gif"
+        />
+      [ 변경 후 ] : 상대경로로 수정
+      <img
+          width="600px"
+          src="./example_image.gif"
+        />
+      8. html 내에 <h3>실행 방법 및 의존성 모듈 설치</h3> 하위 내용 아래와 같이 수정
+      [ EXAMPLE ]
+      [ 변경 전 ] : p에 className 없음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          index.html 열기
+        </p>
+      [ 변경 후 ] : p에 className 있음
+        <p>
+          <strong>q1</strong>
+          경로
+          <code>./question/q1_js</code>
+          <p class="excute-text">index.html 열기</p>
+        </p>
+
+
+      [ 변경 전 ] : p태그와 pre태그가 div로 감싸져있지 않음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+
+        <p>터미널</p>
+        <pre><code class="language-bash"><div>  $ npm install
+        $ npm start
+      </div></code></pre>
+
+      [ 변경 후 ] : p태그와 pre태그가 div.code-wrap 으로 감싸져있음
+        <p>
+          <strong>q4</strong>
+          경로
+          <code>./question/q4_react.js</code>
+        </p>
+        
+        <div class="code-wrap">
+        <p>터미널</p>
+        <pre>
+          <code class="language-bash"><div>  $ npm install
+      $ npm start
+    </div></code></pre>
+    </div>
+    */
+    html {
+      overflow-x: hidden;
+    }
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    ul,
+    ol,
+    li,
+    dl,
+    dt,
+    dd,
+    p,
+    table {
+      margin: 0;
+      padding: 0;
+      color: #494949;
+      letter-spacing: -0.025rem;
+      box-sizing: border-box;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 600;
+    }
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    a img {
+      border: none;
+    }
+
+    img {
+      max-width: 100%;
+      vertical-align: middle;
+    }
+
+    ul li {
+      list-style: none;
+    }
+    p {
+      line-height: 1.8;
+    }
+
+    /* STYLE */
+    body {
+      padding: 0;
+      margin: 0;
+      line-height: 1.6;
+    }
+    h2 {
+      padding: 50px 0;
+      color: #ffffff;
+      font-size: 2rem;
+      text-align: center;
+      background: linear-gradient(45deg, #ed234b, #ff6c89, #ff6fb7);
+    }
+    h2::before {
+      content: "#";
+      display: inline-block;
+      margin-right: 5px;
+      color: #ff9db0;
+      font-weight: 300;
+      font-size: 2.2rem;
+    }
+    h3 {
+      position: relative;
+      margin: 30px 20px;
+      padding-bottom: 15px;
+      color: #303030;
+      font-size: 1.6rem;
+      border-bottom: 1px solid #ededed;
+    }
+
+    blockquote {
+      margin: 20px;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+
+    strong {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .code-wrap {
+      position: relative;
+      background: #2f303b;
+      margin: 15px 0 0 0;
+    }
+    .code-wrap > p {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding: 2px 15px;
+      font-size: 0.7rem;
+      color: #ffffff;
+      text-align: center;
+      background: #61c8cc;
+    }
+    code {
+      background: #ededed;
+    }
+
+    .language-css > div,
+    .language-js > div {
+      color: #fff;
+      padding: 30px 20px;
+      background: #2f303b;
+    }
+    code.language-bash div {
+      margin-top: -20px;
+      padding: 30px 20px;
+      font-size: 1rem;
+      color: #ffffff;
+      background: #2f303b;
+      box-sizing: border-box;
+    }
+    code::after {
+      content: "";
+      display: block;
+    }
+    code.inlineBlock::after {
+      content: "";
+      display: inline-block;
+    }
+
+    .excute-text {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #ed234b;
+    }
+    /* 좌, 우 여백 */
+    ol,
+    ul {
+      margin: 20px;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    ol li {
+      margin-left: 15px;
+    }
+    li {
+      font-size: 0.85rem;
+    }
+    h4,
+    h5,
+    h6,
+    p,
+    img,
+    pre {
+      padding: 0 20px;
+    }
+  </style>
+  </head>
+  <body>
+    <h2 id="case3--infinite-scroll">Case3 : Infinite scroll</h2>
+    <h3 id="케이스-주제">케이스 주제</h3>
+    <p>Q. 무한 스크롤 목록뷰를 구현하세요.</p>
+    <h3 id="기능-요구사항">기능 요구사항</h3>
+    <ol>
+      <li>최초에는 20개의 목록을 불러옵니다.</li>
+      <li>
+        스크롤을 최하단으로 이동시 ‘loading’ 상태표시가 나타나며, 이후의 20개
+        목록을 더 가져옵니다.
+      </li>
+      <li>
+        로딩 완료시 ‘loading’ 표시가 사라지며, 가져온 목록이 하단에 추가됩니다.
+        (무한 반복)
+      </li>
+    </ol>
+    <h3 id="기능-작동-이미지">기능 작동 이미지</h3>
+    <ol>
+      <li>
+        <p>최초 접속시</p>
+        <br />
+        <img
+          width="600px"
+          src="./example_image.gif"
+        />
+      </li>
+    </ol>
+    <h3 id="실행-방법--풀이-방법-안내">실행 방법 / 풀이 방법 안내</h3>
+    <blockquote>
+      <p>문제 풀기 방식 :</p>
+      <ol>
+        <li>
+          터미널에서 각 문제 폴더 디렉토리로 이동하여 npm install로 의존성을
+          설치
+        </li>
+        <li>package.json을 참고하여, 명시된 scripts 명령어로 개발서버 실행.</li>
+        <li>코드 수정하면서 문제 해결하세요</li>
+      </ol>
+    </blockquote>
+    <p>
+      기본 번들러로 <code class="inlineBlock">parcel</code>을 사용했습니다. -
+      <code class="inlineBlock">react</code> 문제의 경우, <code class="inlineBlock">react-scripts</code> 사용. 문제
+      디렉토리에서 <code class="inlineBlock">npm start</code> 또는
+      <code class="inlineBlock">npx parcel index.html watch</code>로 개발서버를 실행하세요.
+    </p>
+    <h3 id="문제">문제</h3>
+    <p>
+      q1. Javascript - <code class="inlineBlock">scrollTop</code>, <code class="inlineBlock">clientHeight</code>,
+      <code class="inlineBlock">scrollHeight</code> 등의 요소의 프로퍼티를 활용하여 해결하시오.
+    </p>
+    <p>
+      q2. Javascript - 앞서 작성한 코드에 debounce를 적용해 기능을 구현하시오.
+    </p>
+    <p>
+      q3. Javascript - 다음으로 IntersectionObserver를 활용해 기능을 구현하시오.
+    </p>
+    <p>
+      q4. React - 마지막으로, 리액트에서 IntersectionObserver를 활용해 기능을
+      구현하시오.
+    </p>
+    <h3 id="주요-학습-키워드">주요 학습 키워드</h3>
+    <ul>
+      <li>
+        스크롤 동작 감지, 이벤트 리스너, scrollTop, mousewheel,
+        IntersectionObserver, useEffect
+      </li>
+    </ul>
+    <h3 id="작성해주셔야-하는-question-파일경로">
+      작성해주셔야 하는 question 파일경로
+    </h3>
+    <p><strong>q1</strong> <code>./question/q1_js/index.js</code></p>
+    <p>
+      <strong>q2</strong>
+      <code>./question/q2_js_debounce_trottle/index.js</code>
+      <code>./question/q2_js_debounce_trottle/util.js</code>
+    </p>
+    <p>
+      <strong>q3</strong>
+      <code>./question/q3_js_Intersection_Observer/index.js</code>
+    </p>
+    <p>
+      <strong>q4</strong>
+      <code>./question/q4_react_Intersaction_Observer/src/FetchMore.js</code>
+    </p>
+    <h3 id="실행-방법-및-의존성-모듈-설치">실행 방법 및 의존성 모듈 설치</h3>
+    <p>
+      <strong>q1</strong>
+      경로
+      <code>./question/q1_js</code>
+    </p>
+
+    <div class="code-wrap">
+    <p>터미널</p>
+    <pre>
+      <code class="language-bash"><div>  $ npm install
+  $ npm start
+</div></code></pre>
+</div>
+
+
+    <p>
+      <strong>q2</strong>
+      경로
+      <code>./question/q2_js_debounce_trottle</code>
+    </p>
+
+    <div class="code-wrap">
+    <p>터미널</p>
+    <pre>
+      <code class="language-bash"><div>  $ npm install
+  $ npm start
+</div></code></pre>
+</div>
+
+    <p>
+      <strong>q3</strong>
+      경로
+      <code>./question/q3_js_Intersection_Observer</code>
+    </p>
+
+    <div class="code-wrap">
+    <p>터미널</p>
+    <pre>
+      <code class="language-bash"><div>  $ npm install
+  $ npm start
+</div></code></pre>
+</div>
+
+    <p>
+      <strong>q4</strong>
+      경로
+      <code>./question/q4_react_Intersaction_Observer</code>
+    </p>
+    <div class="code-wrap">
+    <p>터미널</p>
+    <pre>
+      <code class="language-bash"><div>  $ npm install
+  $ npm start
+</div></code></pre>
+</div>
+  </body>
+</html>
